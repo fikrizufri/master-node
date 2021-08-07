@@ -3,9 +3,11 @@ const app = express();
 const productRoutes = require('./api/routes/product');
 const orderRoutes = require('./api/routes/order');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 app.use(morgan('dev'));
+app.use('/assets',express.static('assets'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -20,7 +22,8 @@ app.use((req, res, next) => {
     next();
 })
 
-
+mongoose.connect('mongodb://localhost:27017/admin', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.Promise = global.Promise;
 app.use('/orders', orderRoutes);
 app.use('/products', productRoutes);
 
